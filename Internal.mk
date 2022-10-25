@@ -150,7 +150,7 @@ OBJECTS = $(addprefix $(BUILD_DIR)/,$(C_SOURCES:.c=.o))
 vpath %.c $(sort $(dir $(C_SOURCES)))
 OBJECTS += $(addprefix $(BUILD_DIR)/,$(CPP_SOURCES:.cpp=.o))
 vpath %.cpp $(sort $(dir $(CPP_SOURCES)))
-OBJECTS += $(addprefix $(BUILD_DIR)/,$(CPP_COMPILED))
+OBJECTS += $(CPP_COMPILED)
 vpath %.s $(sort $(dir $(CPP_COMPILED)))
 # list of ASM program objects
 OBJECTS += $(addprefix $(BUILD_DIR)/,$(ASM_SOURCES:.s=.o))
@@ -185,8 +185,6 @@ $(BUILD_DIR)/%.o: %.s Makefile | $(BUILD_DIR)
 
 $(BUILD_DIR)/%.o: %.o Makefile | $(BUILD_DIR)
 	$(ECHO) $@
-	@mkdir -p $(dir $@)
-	@cp $< $@
 
 # Build .elf file
 $(BUILD_DIR)/$(TARGET).elf: $(OBJECTS) Makefile
