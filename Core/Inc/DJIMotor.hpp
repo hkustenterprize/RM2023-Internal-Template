@@ -2,8 +2,8 @@
  * @file DJIMotor.hpp
  * @author JIANG Yicheng (EthenJ@outlook.sg)
  * @brief
- * @version 0.1
- * @date 2022-10-25
+ * @version 0.2
+ * @date 2022-10-30
  *
  * @copyright This file is only for HKUST Enterprize RM2023 internal competition. All Rights Reserved.
  *
@@ -20,7 +20,6 @@ namespace DJIMotor
 class DJIMotor
 {
    public:
-    DJIMotor();
     DJIMotor(const DJIMotor &) = delete;
     DJIMotor &operator=(const DJIMotor &) = delete;
 
@@ -35,7 +34,7 @@ class DJIMotor
      * @brief Get the current position of the motor in radian
      * @note  You may need to multiply the reduction ratio of the motor to get the actual position.
      *
-     * @return uint16_t
+     * @return float
      */
     virtual float getPosition() const;
 
@@ -48,9 +47,9 @@ class DJIMotor
     virtual void setPosition(float position);
 
     /**
-     * @brief Get the current speed of the motor in revolutions per minute
+     * @brief Get the current speed of the motor in revolutions per minute (rpm)
      *
-     * @return uint16_t
+     * @return int16_t
      */
     virtual int16_t getRPM() const;
 
@@ -70,7 +69,7 @@ class DJIMotor
 
     /**
      * @brief Set the output current(or voltage) of the motor
-     * @note  This function will limit the current(or voltage) to the current limit of the motor.
+     * @note  This function will limit the current(or voltage) according to the current(or voltage) limit of the motor.
      *        Please call sendMotorGroup() to send the command to the motor.
      *
      * @param current
@@ -82,6 +81,8 @@ class DJIMotor
      * @note  To avoid overflow,
      *          the maximum current limit for M3508 is 16384,
      *          and the maximum voltage limit for GM6020 is 30000.
+     *
+     * The default limit is 10000.
      *
      * @param current
      */
@@ -109,33 +110,48 @@ class DJIMotor
      */
     bool isConnected() const;
 
+    /**
+     * @brief The array of all the possible DJIMotors
+     */
+    static DJIMotor motors[11];
+
+    /**
+     * @attention   This function is used to decode the CAN message and update the motor data,
+     *              you should not use this function.
+     */
     static void decodeFeedback(CAN_HandleTypeDef *);
 
    protected:
-    volatile uint16_t rawEncoder = 0;
-    volatile uint16_t lastRawEncoder = 0;
-    volatile float position = 0.0f;
-    volatile int16_t rpm = 0;
-    volatile int16_t actualCurrent = 0;
-    volatile int16_t setCurrent = 0;
-    volatile uint16_t currentLimit = 10000;
+    /**
+     * @attention   You should not call this constructor directly.
+     *              Instead, call DJIMotor::getMotor() to get the motor instance according to the motor CAN ID.
+     */
+    DJIMotor();
 
-    volatile uint8_t temperature = 0;
+    volatile uint16_t rawEncoder;
+    volatile uint16_t lastRawEncoder;
+    volatile float position;
+    volatile int16_t rpm;
+    volatile int16_t actualCurrent;
+    volatile int16_t setCurrent;
+    volatile uint16_t currentLimit;
 
-    volatile int32_t rotaryCnt = 0;
-    volatile int16_t positionOffset = 0;
+    volatile uint8_t temperature;
 
-    volatile uint32_t disconnectCnt = 0;
-    volatile uint32_t receiveCnt = 0;
-    volatile bool connected = false;
+    volatile int32_t rotaryCnt;
+    volatile int16_t positionOffset;
 
+    volatile uint32_t disconnectCnt;
+    volatile uint32_t receiveCnt;
+    volatile bool connected;
+
+    friend DJIMotor &getMotor(uint8_t id);
     friend void motorUpdate(void *);
     friend void sendMotorGroup(uint32_t group);
 };
 
 /**
- * @brief Get the Motor object
- *
+ * @brief Get the DJIMotor object according to the CAN ID
  *
  * @param canid (eg. 0x205)
  * @return DJIMotor&
@@ -143,10 +159,19 @@ class DJIMotor
 DJIMotor &getMotor(uint32_t canid);
 
 /**
- * @brief Send the command to the motor by group
+ * @brief   Send the command to the motor by group,
+ *          call this function after you set the output current(or voltage) of the motor.
+ * 
+ * @param group     0 -> 0x200 , 1 -> 0x1ff, 2 -> 0x2ff
  */
 void sendMotorGroup(uint32_t group);
 
+/**
+ * @brief Initialize the DJIMotor driver
+ *          Call this function before using this DJIMotor driver
+ * 
+ * @note  If you do not want to use this DJIMotor driver provided by us, do not call this function.
+ */
 void init();
 
 }  // namespace DJIMotor

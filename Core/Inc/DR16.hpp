@@ -89,7 +89,7 @@ struct RcData
 /**
  * @brief Get the DR16 data
  *
- * @return const volatile&
+ * @return const volatile RcData &
  */
 const volatile RcData &getRcData();
 
