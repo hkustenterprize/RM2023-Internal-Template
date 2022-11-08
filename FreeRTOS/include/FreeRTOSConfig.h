@@ -144,8 +144,8 @@ extern "C"
 #define configASSERT(x)                              \
     if ((x) == 0)                                    \
     {                                                \
-        __asm volatile("bkpt");                      \
         assertFailed((uint8_t *)__FILE__, __LINE__); \
+        __asm volatile("bkpt");                      \
     }
 
     /* the following function will be called when task function returns */
