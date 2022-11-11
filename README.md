@@ -16,3 +16,6 @@
 ## FreeRTOS
 
 [https://www.freertos.org/features.html](https://www.freertos.org/features.html "https://www.freertos.org/features.html")
+
+## 
+[Phase 2 Tutorials](https://app.gitbook.com/o/Ge5THhzazmpoHzdmQGwe/s/wbRfAxEGM1cksPMwmjOO/software-tutorial/phase-2)
