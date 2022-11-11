@@ -18,4 +18,4 @@
 [https://www.freertos.org/features.html](https://www.freertos.org/features.html "https://www.freertos.org/features.html")
 
 ## 
-[Phase 2 Tutorials](https://app.gitbook.com/o/Ge5THhzazmpoHzdmQGwe/s/wbRfAxEGM1cksPMwmjOO/software-tutorial/phase-2)
+[Phase 2 Tutorials](https://internal.enterprize.wiki/software-tutorial/phase-2)
