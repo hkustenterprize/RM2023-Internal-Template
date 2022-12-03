@@ -1,10 +1,10 @@
 /**
  * @file DR16.hpp
  * @author JIANG Yicheng (EthenJ@outlook.sg)
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2022-10-25
- * 
+ *
  * @copyright This file is only for HKUST Enterprize RM2023 internal competition. All Rights Reserved.
  */
 
@@ -12,6 +12,7 @@
 
 #ifdef DR16_UART
 #include "main.h"
+#include "usart.h"
 
 namespace DR16
 {
@@ -104,7 +105,7 @@ bool isConnected();
 /**
  * @brief initialize the DR16, call this function before using the DR16
  */
-void init();
+void init(UART_HandleTypeDef *huart = &DR16_UART);
 
 }  // namespace DR16
 #endif  // DR16_UART
